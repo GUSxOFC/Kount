@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>GusOfcXD - App</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: url('https://img1.pixhost.to/images/6514/611458360_kyami.jpg') no-repeat center center fixed;
+      background-size: cover;
+      color: white;
+      text-shadow: 1px 1px 2px black;
+    }
+    header {
+      padding: 20px;
+      background: rgba(0, 0, 0, 0.7);
+      text-align: center;
+      font-size: 2em;
+      font-weight: bold;
+    }
+    .menu {
+      background: rgba(0, 0, 0, 0.7);
+      margin: 15px;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px cyan;
+    }
+    input, select, button, textarea {
+      width: 100%;
+      margin: 10px 0;
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+    }
+    button {
+      background: linear-gradient(to right, #00c3ff, #7d2ae8);
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 10px cyan;
+    }
+    iframe {
+      width: 100%;
+      height: 300px;
+      border-radius: 10px;
+      border: none;
+      margin-top: 10px;
+    }
+    .owner-info {
+      text-align: center;
+      margin-top: 30px;
+    }
+    .owner-info img {
+      border-radius: 50%;
+      width: 100px;
+      height: 100px;
+      border: 2px solid white;
+    }
+  </style>
+</head>
+<body>
+
+  <header>GusOfcXD - App</header>
+
+  <div class="menu">
+    <h2>Download Video TikTok</h2>
+    <input type="text" id="tiktokLink" placeholder="https://vt.tiktok.com/..." />
+    <button onclick="downloadTikTok()">Download</button>
+    <div id="videoResult"></div>
+  </div>
+
+  <div class="menu">
+    <h2>Spam Chat Bot Telegram</h2>
+    <input type="text" id="botToken" placeholder="Token Bot Telegram" />
+    <input type="text" id="chatId" placeholder="Chat ID Telegram" />
+    <input type="text" id="spamMessage" placeholder="Pesan untuk spam" />
+    <input type="number" id="spamJumlah" placeholder="Jumlah pesan" />
+    <button onclick="spamTelegram()">Kirim Spam</button>
+  </div>
+
+  <div class="menu">
+    <h2>Ganti Nama Bot Telegram</h2>
+    <input type="text" id="gantiToken" placeholder="Token Bot" />
+    <input type="text" id="namaBaru" placeholder="Nama baru bot" />
+    <button onclick="gantiNamaBot()">Ganti Nama</button>
+    <div id="gantiStatus"></div>
+  </div>
+
+  <div class="menu">
+    <h2>Belajar Menu</h2>
+    <select onchange="tampilBelajar(this.value)">
+      <option value="">-- Pilih --</option>
+      <option value="xploit">Apa itu Xploit?</option>
+      <option value="murbug">Apa itu Murbug?</option>
+      <option value="cyber">Apa itu Cyber?</option>
+      <option value="anonymous">Apa itu Anonymous?</option>
+    </select>
+    <div id="belajarContainer"></div>
+  </div>
+
+  <div class="menu">
+    <h2>Nonton Kartun</h2>
+    <select onchange="tampilFilm(this.value)">
+      <option value="">-- Pilih video --</option>
+      <option value="vid1">Nonton Kartun 1</option>
+      <option value="vid2">Nonton Kartun 2</option>
+      <option value="vid3">Nonton Kartun 3</option>
+      <option value="vid4">Nonton Kartun 4</option>
+    </select>
+    <p id="pesan">Selamat menonton!</p>
+    <div id="filmContainer"></div>
+  </div>
+
+  <div class="menu">
+    <h2>Simpan Link Grup Telegram (GB)</h2>
+    <input type="text" id="linkGb" placeholder="Masukkan link grup" />
+    <input type="text" id="namaGb" placeholder="Nama grup" />
+    <textarea id="deskGb" placeholder="Deskripsi grup..."></textarea>
+    <button onclick="simpanGb()">Simpan Grup</button>
+    <div id="listGrup"></div>
+  </div>
+
+  <div class="menu owner-info">
+    <img src="https://img1.pixhost.to/images/6514/611458360_kyami.jpg" alt="Owner">
+    <p><strong>Nama Owner:</strong> GusOfcXD</p>
+    <p><strong>Status:</strong> Pemula bg</p>
+  </div>
+
+  <script>
+    function downloadTikTok() {
+      const link = document.getElementById("tiktokLink").value;
+      if (!link) return alert("Masukkan link dulu!");
+      fetch(`https://tikwm.com/api/?url=${encodeURIComponent(link)}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data && data.data && data.data.play) {
+            document.getElementById("videoResult").innerHTML =
+              `<video src="${data.data.play}" controls autoplay></video>`;
+          } else {
+            alert("Gagal mengambil video!");
+          }
+        });
+    }
+
+    function spamTelegram() {
+      const token = document.getElementById("botToken").value;
+      const chatId = document.getElementById("chatId").value;
+      const message = document.getElementById("spamMessage").value;
+      const jumlah = parseInt(document.getElementById("spamJumlah").value);
+      if (!token || !chatId || !message || !jumlah) return alert("Isi semua field!");
+      for (let i = 0; i < jumlah; i++) {
+        fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+          method: "POST",
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ chat_id: chatId, text: message })
+        });
+      }
+      alert("Pesan dikirim!");
+    }
+
+    function gantiNamaBot() {
+      const token = document.getElementById("gantiToken").value;
+      const newName = document.getElementById("namaBaru").value;
+      if (!token || !newName) return alert("Isi semua field!");
+      fetch(`https://api.telegram.org/bot${token}/setMyName`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: newName })
+      })
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById("gantiStatus").innerText =
+          data.ok ? `Nama bot diganti ke: ${newName}` : `Gagal: ${data.description}`;
+      });
+    }
+
+    function tampilBelajar(topik) {
+      let teks = "";
+      if (topik === "xploit") teks = "Xploit: teknik untuk memanfaatkan celah sistem.";
+      else if (topik === "murbug") teks = "Murbug: metode bug untuk mengganggu sistem.";
+      else if (topik === "cyber") teks = "Cyber: dunia digital dan teknologi informasi.";
+      else if (topik === "anonymous") teks = "Anonymous: grup hacker anti sensor dan pembela kebebasan internet.";
+      document.getElementById("belajarContainer").innerHTML = `<p>${teks}</p>`;
+    }
+
+    function tampilFilm(value) {
+      const linkMap = {
+        vid1: "https://videy.co/v/?id=ggO74dtz1",
+        vid2: "https://videy.co/v/?id=43TKR5Ju1",
+        vid3: "https://videy.co/v/?id=k83XTHrN1",
+        vid4: "https://videy.co/v/?id=qZn1Jdev1"
+      };
+      const pesan = document.getElementById("pesan");
+      const frame = `<iframe src="${linkMap[value]}" allow="autoplay"></iframe>`;
+      document.getElementById("filmContainer").innerHTML = value ? frame : "";
+      pesan.innerText = value ? "Selamat menonton, jangan skip ya!" : "Pilih video dulu.";
+    }
+
+    function simpanGb() {
+      const link = document.getElementById("linkGb").value;
+      const nama = document.getElementById("namaGb").value;
+      const deskripsi = document.getElementById("deskGb").value;
+      if (!link || !nama || !deskripsi) return alert("Isi semua kolom!");
+
+      const grups = JSON.parse(localStorage.getItem("grups") || "[]");
+      grups.push({ link, nama, deskripsi });
+      localStorage.setItem("grups", JSON.stringify(grups));
+      tampilGb();
+      document.getElementById("linkGb").value = "";
+      document.getElementById("namaGb").value = "";
+      document.getElementById("deskGb").value = "";
+    }
+
+    function tampilGb() {
+      const grups = JSON.parse(localStorage.getItem("grups") || "[]");
+      const container = document.getElementById("listGrup");
+      container.innerHTML = grups.map(g =>
+        `<div style="margin-bottom:10px">
+          <strong>${g.nama}</strong><br>
+          <p>${g.deskripsi}</p>
+          <a href="${g.link}" target="_blank">
+            <button>Join Grup</button>
+          </a>
+        </div>`
+      ).join("");
+    }
+
+    window.onload = tampilGb;
+  </script>
+
+</body>
+  </html>
